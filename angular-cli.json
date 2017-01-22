@@ -18,6 +18,7 @@
       "prefix": "kw",
       "mobile": false,
       "styles": [
+        "../node_modules/reset-css/reset.css",
         "styles.scss"
       ],
       "scripts": [],
