@@ -1,0 +1,40 @@
+<form
+  class = user-filter
+  [formGroup] = filterForm>
+  
+  <md-input-container>
+    <input
+      md-input
+      formControlName = query
+      type = text
+      placeholder = search>
+  </md-input-container>
+</form>
+
+<md-nav-list
+  class = user-list>
+  <a
+    md-list-item
+    @fade
+    *ngFor = "let user of usersPage"
+    [routerLink] = "['/user', user.id]"
+    class = user>
+      {{user.fullName}}
+    </a>
+</md-nav-list>
+
+<div
+  class = pagination>
+  <span
+    *ngIf = "usersPage.length === 0">
+    No matching, try another search
+  </span>
+  
+  <button
+    md-button
+    *ngFor = "let fake of pageArray; let page = index"
+    (click) = "loadPage(page + 1)"
+    [class.active] = "page + 1 === pageNumber">
+    {{page + 1}}
+  </button>
+</div>

@@ -1,0 +1,62 @@
+<button
+  md-button
+  [routerLink] = "['../../users']">
+  Go to users
+</button>
+
+<div
+  class = holder
+  *ngIf = "user && user.id"
+  @fade>
+  <h1>
+    {{user?.fullName}}
+  </h1>
+  
+  <div
+    fxLayout = row
+    fxLayoutWrap = wrap
+    class = field>
+    <span
+      fxFlex = 100
+      fxFlex.gt-sm = 20
+      class = label>
+      phone
+    </span>
+    <strong
+      fxFlex>
+      {{user?.phone}}
+    </strong>
+  </div>
+  
+  <div
+    fxLayout = row
+    fxLayoutWrap = wrap
+    class = field>
+    <span
+      fxFlex = 100
+      fxFlex.gt-sm = 20
+      class = label>
+      email
+    </span>
+    <strong
+      fxFlex>
+      {{user?.email}}
+    </strong>
+  </div>
+  
+  <div
+    fxLayout = row
+    fxLayoutWrap = wrap
+    class = field>
+    <span
+      fxFlex = 100
+      fxFlex.gt-sm = 20
+      class = label>
+      birthday
+    </span>
+    <strong
+      fxFlex>
+      {{user?.birthday}}
+    </strong>
+  </div>
+</div>
