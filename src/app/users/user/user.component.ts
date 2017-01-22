@@ -22,6 +22,7 @@ import { fade } from '../../shared/fade.animation';
 })
 export class UserComponent implements OnInit, OnDestroy {
   user: User;
+  loading: boolean;
 
   user$$: Subscription;
 
@@ -37,10 +38,12 @@ export class UserComponent implements OnInit, OnDestroy {
     // this could be done with async pipe but then it gets called multiple times
     this.user$$ = this.activatedRoute.params
       .filter(params => params['id'])
+      .do(() => this.loading = true)
       .switchMap(params =>
         this.userService
           .getUser(parseInt(params['id']))
       )
+      .do(() => this.loading = false)
       .subscribe(user => {
         if (user) {
           this.user = user;

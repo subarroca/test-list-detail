@@ -2,39 +2,56 @@
   class = user-filter
   [formGroup] = filterForm>
   
-  <md-input-container>
-    <input
-      md-input
-      formControlName = query
-      type = text
-      placeholder = search>
-  </md-input-container>
+  <div
+    fxLayout = row>
+    <md-input-container>
+      <input
+        md-input
+        formControlName = query
+        type = text
+        placeholder = search>
+    </md-input-container>
+    
+    <button
+      md-button
+      (click) = clearQuery()>
+      clear
+    </button>
+  </div>
 </form>
 
-<md-nav-list
-  class = user-list>
-  <a
-    md-list-item
-    @fade
-    *ngFor = "let user of usersPage"
-    [routerLink] = "['/user', user.id]"
-    class = user>
-      {{user.fullName}}
-    </a>
-</md-nav-list>
+<div
+  *ngIf = loading>
+  Loading, please wait
+</div>
 
 <div
-  class = pagination>
-  <span
-    *ngIf = "usersPage.length === 0">
-    No matching, try another search
-  </span>
+  *ngIf = !loading>
+  <md-nav-list
+    class = user-list>
+    <a
+      md-list-item
+      @fade
+      *ngFor = "let user of users"
+      [routerLink] = "['/user', user.id]"
+      class = user>
+        {{user.fullName}}
+      </a>
+  </md-nav-list>
   
-  <button
-    md-button
-    *ngFor = "let fake of pageArray; let page = index"
-    (click) = "loadPage(page + 1)"
-    [class.active] = "page + 1 === pageNumber">
-    {{page + 1}}
-  </button>
+  <div
+    class = pagination>
+    <span
+      *ngIf = "users.length === 0">
+      No matching, try another search
+    </span>
+    
+    <button
+      md-button
+      *ngFor = "let fake of pageArray; let page = index"
+      (click) = "loadPage(page + 1)"
+      [class.active] = "page + 1 === pageNumber">
+      {{page + 1}}
+    </button>
+  </div>
 </div>

@@ -7,8 +7,29 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+  <style>
+    html,
+    body,
+    kw-root,
+    .initial-loading{
+      min-height: 100vh;
+    }
+
+    .initial-loading{
+      font-family: 'Roboto';
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
 </head>
 <body>
-  <kw-root>Loading...</kw-root>
+  <kw-root>
+    <div
+      class = initial-loading>
+      Loading...
+    </div>
+  </kw-root>
 </body>
 </html>

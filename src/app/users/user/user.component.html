@@ -5,8 +5,13 @@
 </button>
 
 <div
+  *ngIf = loading>
+  Loading, please wait
+</div>
+
+<div
   class = holder
-  *ngIf = "user && user.id"
+  *ngIf = "!loading"
   @fade>
   <h1>
     {{user?.fullName}}

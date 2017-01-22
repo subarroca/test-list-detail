@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs/Rx';
 import { UserService } from '../shared/user.service';
 import { User } from '../shared/user';
 import { fade } from '../../shared/fade.animation';
+import { Pagination } from '../../shared/pagination';
 
 
 @Component({
@@ -21,13 +22,11 @@ import { fade } from '../../shared/fade.animation';
 })
 export class UsersComponent implements OnInit, OnDestroy {
   private users: User[];
-
-  private filteredUsers: User[];
-  private usersPage: User[];
-
+  private loading: boolean;
 
   // Form vars
   private queryControl: FormControl = new FormControl();
+  private debounceMs: number = 300;
 
   private filterForm: FormGroup = new FormGroup({
     query: this.queryControl
@@ -38,9 +37,7 @@ export class UsersComponent implements OnInit, OnDestroy {
 
 
   // Pagination
-  private pageSize: number = 25;
-  private pageNumber: number = 1;
-  private pageTotal: number = 1;
+  private pagination: Pagination;
   private pageArray: number[];
 
 
@@ -52,20 +49,24 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // get user list
+    this.loading = true;
     this.users$$ = this.userService.getUsers()
+      .do(() => {
+        this.loading = false
+      })
       .subscribe(users => {
-        this.users = users;
-        this.filteredUsers = users;
-        this.loadPage(1);
+        this.users = users.results;
+        this.pagination = users.pagination;
+        this.pageArray = this.getPaginationArray();
       });
 
     // on any change in form parse filtering again
     this.filterForm$$ = this.filterForm.valueChanges
+      .debounceTime(this.debounceMs)
+      .distinctUntilChanged()
       .subscribe(changes => {
-        this.filteredUsers = this.users.filter(user => {
-          return user.match(changes);
-        });
-        this.loadPage(1);
+        console.log(changes);
+        this.loadPage(0);
       });
   }
 
@@ -80,12 +81,22 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
 
-
   loadPage(pageNumber: number) {
-    this.pageNumber = pageNumber;
-    this.usersPage = this.filteredUsers.slice((pageNumber - 1) * this.pageSize, pageNumber * this.pageSize);
-    this.pageTotal = Math.ceil(this.filteredUsers.length / this.pageSize);
-    this.pageArray = Array(this.pageTotal);
+    this.loading = true;
+    this.userService.getUsers(pageNumber, this.queryControl.value);
+  }
+
+  getPaginationArray() {
+    if (this.pagination && this.pagination.pageSize) {
+      return Array(Math.ceil(this.pagination.totalItems / this.pagination.pageSize));
+    } else {
+      return [];
+    }
+  }
+
+
+  clearQuery() {
+    this.queryControl.reset();
   }
 
 }

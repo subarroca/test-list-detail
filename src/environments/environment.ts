@@ -5,5 +5,6 @@
 
 export const environment = {
   production: false,
-  usersUrl: 'assets/data/users.json'
+  usersUrl: 'assets/data/users.json',
+  server: 'http://localhost:3000',
 };
