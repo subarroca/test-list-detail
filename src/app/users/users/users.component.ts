@@ -5,6 +5,9 @@ import { FormGroup, FormControl } from '@angular/forms';
 
 // EXTERNAL
 import { Subscription } from 'rxjs/Rx';
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
+
 
 
 // OWN
@@ -21,14 +24,14 @@ import { Pagination } from '../../shared/pagination';
   animations: [fade]
 })
 export class UsersComponent implements OnInit, OnDestroy {
-  private users: User[];
+  public users: User[];
   private loading: boolean;
 
   // Form vars
   private queryControl: FormControl = new FormControl();
   private debounceMs: number = 300;
 
-  private filterForm: FormGroup = new FormGroup({
+  public filterForm: FormGroup = new FormGroup({
     query: this.queryControl
   });
 
@@ -37,7 +40,7 @@ export class UsersComponent implements OnInit, OnDestroy {
 
 
   // Pagination
-  private pagination: Pagination;
+  public pagination: Pagination;
   private pageArray: number[];
 
 
@@ -50,10 +53,9 @@ export class UsersComponent implements OnInit, OnDestroy {
   ngOnInit() {
     // get user list
     this.loading = true;
+    this.userService.clearList();
     this.users$$ = this.userService.getUsers()
-      .do(() => {
-        this.loading = false
-      })
+      .do(() => this.loading = false)
       .subscribe(users => {
         this.users = users.results;
         this.pagination = users.pagination;
@@ -63,9 +65,9 @@ export class UsersComponent implements OnInit, OnDestroy {
     // on any change in form parse filtering again
     this.filterForm$$ = this.filterForm.valueChanges
       .debounceTime(this.debounceMs)
+      .debounceTime(this.debounceMs)
       .distinctUntilChanged()
       .subscribe(changes => {
-        console.log(changes);
         this.loadPage(0);
       });
   }

@@ -1,11 +1,27 @@
 # User list / detail
 
-## Frontend project
-Data is currently loaded from a local file.
+## Run
+
+
+For frontend
+
+```
+ng serve
+```
+
+For express server
+
+```
+cd server && npm start
+```
+
+
+
 No tests are provided
+
 Below are the details for building
 
-===
+## Angular cli
 This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.26.
 
 ### Development server

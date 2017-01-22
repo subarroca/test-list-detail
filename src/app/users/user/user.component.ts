@@ -6,6 +6,7 @@ import { MdSnackBar } from '@angular/material';
 
 // EXTERNAL
 import { Subscription } from 'rxjs/Rx';
+import 'rxjs/add/operator/switchMap';
 
 
 // OWN
@@ -41,7 +42,7 @@ export class UserComponent implements OnInit, OnDestroy {
       .do(() => this.loading = true)
       .switchMap(params =>
         this.userService
-          .getUser(parseInt(params['id']))
+          .getUser(parseInt(params['id'], 10))
       )
       .do(() => this.loading = false)
       .subscribe(user => {
@@ -52,7 +53,7 @@ export class UserComponent implements OnInit, OnDestroy {
           this.snackBar.open('User not found', null, {
             duration: 3000
           });
-        }
+        };
       });
   }
 

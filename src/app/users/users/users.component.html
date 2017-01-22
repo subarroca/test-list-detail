@@ -50,7 +50,7 @@
       md-button
       *ngFor = "let fake of pageArray; let page = index"
       (click) = "loadPage(page + 1)"
-      [class.active] = "page + 1 === pageNumber">
+      [class.active] = "page + 1 === pagination.page">
       {{page + 1}}
     </button>
   </div>

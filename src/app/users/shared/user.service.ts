@@ -20,23 +20,21 @@ export class UserService {
   new BehaviorSubject<{ pagination: Pagination, results: User[] }>({ pagination: new Pagination, results: [] });
   list$: Observable<{ pagination: Pagination, results: User[] }> = Observable.from(this.listSubject);
 
-  itemSubject: BehaviorSubject<User> = new BehaviorSubject<User>(new User());
-  item$: Observable<User> = Observable.from(this.itemSubject);
-
 
 
   constructor(
     private http: Http
   ) { }
 
-  getUsers(page: number = 0, q: string = '') {
+  getUsers(page = 0, q = '') {
     let params = new URLSearchParams();
     params.set('page', page.toString());
     params.set('q', q);
 
-    this.http.get(`${environment.server}/users`, {
-      search: params
-    })
+    this.http
+      .get(`${environment.server}/users`, {
+        search: params
+      })
       .map(info => this.parseResponse(info))
       .map(users => this.parseUsers(users))
       .first()
@@ -46,20 +44,18 @@ export class UserService {
   }
 
   getUser(id: number) {
-    // this.getUsers()
-    //   .filter(users => users.length > 0)
-    //   .first()
-    //   .subscribe(users => {
-    //     this.itemSubject.next(users.find(user => user.id === id));
-    //   });
-
-    this.http.get(`${environment.server}/users/${id}`)
+    return this.http
+      .get(`${environment.server}/users/${id}`)
       .map(info => this.parseResponse(info))
       .map(user => new User(user))
-      .first()
-      .subscribe(user => this.itemSubject.next(user));
+      .first();
+  }
 
-    return this.item$;
+  clearList() {
+    this.listSubject.next({
+      pagination: new Pagination(),
+      results: []
+    });
   }
 
 
